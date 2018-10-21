@@ -171,7 +171,7 @@ export default class NNSSell {
       let data1 = await Common.buildInvokeTransData(script, CGASaddr, asset, transcount);
       let data2 = await NNSSell.rechargeReg(transcount.toFixed(8));
       let res = await Https.rechargeandtransfer(data1.data, data2);
-      if (res['errCode'] == '0000') {
+      if (res['errCode'] == '0000') { 
         let txid = res['txid'];
         return txid;
       }

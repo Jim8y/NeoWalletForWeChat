@@ -28,7 +28,7 @@ export default class CGAS {
      * CGAS -> gas
      * @param transcount 兑换数量
      */
-    static async makeRefundTransaction(prikey: string, transcount: number) {
+    static async makeRefundTransaction(transcount: number) {
 
         let utxos = await CGAS.getCGASAssets();
         let gas = new Asset('GAS', Const.id_GAS)

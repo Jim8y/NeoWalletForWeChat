@@ -217,7 +217,6 @@
     };
     mixins = [NotifyMixin];
     data = {
-      assets: {},
       user: {},
       total: '0.00',
       totalShow: '*.**',
@@ -258,8 +257,6 @@
       //update the height regularly
       Emitter.register(TaskType.height, (height) => {
         that.Block = height;
-        console.log('height update')
-        console.log(height)
         that.$apply();
       }, this);
       // Emitter.register(TaskType.asset,())
@@ -303,17 +300,19 @@
       Emitter.register(TaskType.asset, assets => {
         assets['GAS'].amount = parseFloat(assets['GAS'].amount).toFixed(4);
         assets['NEO'].amount = parseFloat(assets['NEO'].amount).toFixed(0);
-        console.log(assets);
+        // console.log('update asset:')
+        // console.log(assets);
         that.$invoke('cassets', 'LoadCoins', assets);
         that.claim = Util.get.claim();
         that.isLoading = false;
         that.$apply();
-        // console.log(that.claim);
-        that.onShowAsset();
       });
       Emitter.register(TaskType.wealth, wealth => {
         that.total = wealth.toFixed(2);
+        if (wealth <= 0)
+          return;
         that.$apply();
+        that.onShowAsset();
       });
     }
     async onPullDownRefresh() {

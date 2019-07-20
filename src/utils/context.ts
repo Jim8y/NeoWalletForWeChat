@@ -41,10 +41,10 @@ export class Context {
     static notity() {
         //注册监听事件
         Emitter.register(TaskType.asset, (address: string = null) => {
-            console.log('Emitter asset update')
-            console.log(address)
+            // console.log('Emitter asset update')
+            // console.log(address)
             // 获取资产之后立即进行价格的更新
-            Context.OnGetAssets(address);
+            // Context.OnGetAssets(address);
         }, this);
 
         Emitter.register(TaskType.tx, (task: Task) => {
@@ -80,6 +80,7 @@ export class Context {
     static async init(account: Nep6.nep6account) {
         Wallet.setAccount(account);
         Context.OnGetHeight();
+        Context.OnGetAssets();
     }
 
     /**
@@ -187,7 +188,7 @@ export class Context {
         let total: number = 0;
         let assets = ["NEO", "GAS"];
         for (let key in assets) {
-            console.log(assets[key])
+            // console.log(assets[key])
             let asset = assets[key];
             const coin = await Https.api_getCoinPrice(asset);
             try {
@@ -206,6 +207,7 @@ export class Context {
             }
         }
         // observer(Context.Assets);
+
         Emitter.fire(TaskType.asset,Context.Assets);
         Emitter.fire(TaskType.wealth,total);
     }

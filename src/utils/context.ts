@@ -51,16 +51,13 @@ export class Context {
         }, this);
 
         Emitter.register(TaskType.history, (observer, address: string = null) => {
-            Context.OnGetTXs(observer,address);
+            Context.OnGetTXs(observer, address);
         }, this);
 
         Emitter.register(TaskType.claim, (observer) => {
             Context.OnGetClaims(observer);
         }, this)
 
-        Emitter.register(TaskType.height, () => {
-            Context.OnGetHeight();
-        }, this)
 
         // 提前注册好重要的资产，避免测试网络或者主网里出现同名的
         let neo = new Asset('NEO', id_NEO);
@@ -107,6 +104,7 @@ export class Context {
                 TaskManager.update(height as number);
             Context.Height = height;
         }
+        Emitter.fire(TaskType.height, height);
         return height;
     }
 
@@ -172,7 +170,7 @@ export class Context {
         Transfer.coin = assets['NEO'];
         console.log(assets)
         observer(assets);
-        // Context.OnGetPrice(observer);
+        Context.OnGetPrice(observer);
     }
 
     /**
@@ -182,27 +180,28 @@ export class Context {
 
         let that = this;
         let total: number = 0;
-        
-        for (let key in Context.Assets) {
-
-            const coin = await Https.api_getCoinPrice((Context.Assets[key] as Asset).name);
-
+        let assets = ["NEO", "GAS"];
+        for (let key in assets) {
+            console.log(assets[key])
+            let asset = assets[key];
+            const coin = await Https.api_getCoinPrice(asset);
             try {
                 // 更新价格
-                (Context.Assets[key] as Asset).price = parseFloat(coin[0]['price_cny']).toFixed(2);
-                let sum = (parseFloat((Context.Assets[key] as Asset).amount.toString())) *
+                (Context.Assets[asset] as Asset).price = parseFloat(coin[0]['price_cny']).toFixed(2);
+                let sum = (parseFloat((Context.Assets[asset] as Asset).amount.toString())) *
                     parseFloat(coin[0]['price_cny']);
                 total += sum;
                 // 更新资产
-                (Context.Assets[key] as Asset).total =
+                (Context.Assets[asset] as Asset).total =
                     sum.toFixed(2);
                 // 更新币市走向
-                if (coin[0]['percent_change_1h'][0] !== '-') (Context.Assets[key] as Asset).rise = true;
-                else (Context.Assets[key] as Asset).rise = false;
+                if (coin[0]['percent_change_1h'][0] !== '-') (Context.Assets[asset] as Asset).rise = true;
+                else (Context.Assets[asset] as Asset).rise = false;
             } catch (err) {
             }
-            observer(Context.Assets);
         }
+        observer(Context.Assets);
+        Emitter.fire(TaskType.asset,Context.Assets);
     }
 
     /**

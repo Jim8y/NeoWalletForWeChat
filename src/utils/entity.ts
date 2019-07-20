@@ -204,6 +204,7 @@ export class TaskManager {
 export enum TaskType {
     tx = 'tx',// 交易确认 需要签名的任务，涉及资产变动
     asset = 'asset',// 资产更新 在tx交易成功后添加资产更新任务，资产更新立即执行
+    // updateAsset = 'updateAsset',
     history = 'history', //更新历史记录
     price = 'price',
     claim = 'claim',

@@ -111,9 +111,9 @@
     methods = {
       LoadCoins(coins) {
         this.coins = coins;
-        console.log('update asset:')
+        // console.log('update asset:')
         this.$apply();
-        console.log(this.coins);
+        // console.log(this.coins);
       },
       async OnSelected(coin) {
         this.$emit('changeCoin', coin);

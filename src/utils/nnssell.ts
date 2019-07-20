@@ -384,7 +384,7 @@ export default class NNSSell {
   static async getMyAuctionState(info: SellDomainInfo): Promise<MyAuction> {
     let myauction = new MyAuction();
     if (!info.id) {
-      console.log("---------------id 为空----------------");
+      // console.log("---------------id 为空----------------");
       console.log(myauction);
       return myauction;
     }

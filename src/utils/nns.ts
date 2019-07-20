@@ -126,14 +126,15 @@ export default class NNS {
      * @method 查询域名信息
      * @param doamin 域名字符串
      */
-    static async queryDomainInfo(doamin: string): Promise<DomainInfo> {
-        var domainarr: string[] = doamin.split('.');
-        var subdomain: string = domainarr[0];
-        var nnshash: Neo.Uint256 = Common.nameHashArray(domainarr);
-        let doamininfo: DomainInfo = await NNS.getOwnerInfo(nnshash, DAPP_NNS);
-        console.log(doamininfo);
+    static async queryDomainInfo(domain: string): Promise<DomainInfo> {
+        // var domainarr: string[] = doamin.split('.');
+        // var subdomain: string = domainarr[0];
+        // var nnshash: Neo.Uint256 = Common.nameHashArray(domainarr);
+        // let doamininfo: DomainInfo = await NNS.getOwnerInfo(nnshash, DAPP_NNS);
+        let domaininfo = await Https.api_getdomaininfo(domain);
+        console.log(domaininfo);
         // var owner = Helper.toHexString(doamininfo.owner);
-        return doamininfo;
+        return domaininfo;
     }
 
     /**

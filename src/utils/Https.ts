@@ -199,7 +199,6 @@ export default class Https {
         } catch (error) {
             return null;
         }
-
     }
 
     /**
@@ -476,17 +475,18 @@ export default class Https {
     }
     //查询domain竞拍情况
     static async api_getdomaininfo(domainname: string) {
-        var str = Https.makeRpcUrl(Https.api_scan, "getdomaininfo", domainname);
-        var result = await Request.Request({ "method": "get" }, str);
+        var postdata = Https.makeRpcPostBody("searchbydomain", domainname);
+        var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.api_scan } }, this.proxy_server + "proxy.php");
+        // var result = await Request.Request({ "method": "get" }, str);
         // var result = await fetch(str, { "method": "get" });
         // var json = await result.json();
         try {
-            var r = result["result"];
+            console.log(result)
+            var r = result["result"][0];
             return r;
         } catch (error) {
             return null
         }
-
     }
     static async getNotify(txid: string) {
         var postdata = Https.makeRpcPostBody("getnotify", txid);

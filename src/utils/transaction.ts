@@ -268,7 +268,7 @@ export default class Transfer {
         let vouts = tx["vout"];
         // let value = tx["value"];
         let txtype = type;
-        console.log('-----1')
+        // console.log('-----1')
         if (txtype.search("Transaction") != -1) {
           txtype = txtype.replace('Transaction', '');
         }
@@ -278,7 +278,7 @@ export default class Transfer {
         let blockindex = tx["blockindex"];
         let time: string =  tx["blocktime"]["$date"]// : tx["blocktime"] + "000";
         let date: string = formatTime(parseInt(time), 'Y/M/D h:m:s');
-        console.log('-----3')
+        // console.log('-----3')
         if (type == "out") {
           if (vins && vins.length == 1) {
             let assetname = "";
@@ -363,7 +363,7 @@ export default class Transfer {
             //   }
             // }
           }
-          console.log('-----6')
+          // console.log('-----6')
           for (const address in arr) {
             if (arr.hasOwnProperty(address)) {
               const data = arr[address];

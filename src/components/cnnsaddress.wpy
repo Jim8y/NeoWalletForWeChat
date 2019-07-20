@@ -122,12 +122,13 @@
       this.showLower = false;
       console.log('is a domain');
       let domain = await Util.get.addrByDomain(address);
-      if (domain !== null && domain.owner !== null) {
-        this.addr = domain.address;
+      console.log(domain)
+      if (domain !== null && domain.maxBuyer !== null) {
+        this.addr = domain['maxBuyer'];//address;
         this.showLower = true;
-        this.address = domain.address;
+        this.address = address//domain.address;
         this.addrres = JSON.stringify({
-          'address': domain.address,
+          'address': domain['maxBuyer'],
           'domain': address
         });
       } else {

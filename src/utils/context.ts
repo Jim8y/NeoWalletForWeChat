@@ -171,11 +171,11 @@ export class Context {
 
         //设置默认转账币种
         Transfer.coin = assets['NEO'];
-        if(!Context.assetLock)
-        { 
-            Emitter.fire(TaskType.asset,Context.Assets);
-            Context.assetLock=true;
-        }
+        // if(!Context.assetLock)
+        // { 
+        //     Emitter.fire(TaskType.asset,Context.Assets);
+        //     Context.assetLock=true;
+        // }
         Context.OnGetPrice();
     }
 

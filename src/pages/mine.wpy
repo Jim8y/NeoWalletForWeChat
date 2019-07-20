@@ -62,15 +62,15 @@
             <image class="arrow" src="../images/Arrow.png"/>
           </navigator>
 
-           <navigator class="item" url="/pages/reorder" style="margin-top:20rpx;margin-bottom:20rpx;">
+           <!-- <navigator class="item" url="/pages/reorder" style="margin-top:20rpx;margin-bottom:20rpx;">
             <view class="left">
               <image class="icon" src="../images/M_NNS.png"/>
               <view class="label">我的NNS</view>
             </view>
             <image class="arrow" src="../images/Arrow.png"/>
-          </navigator>
+          </navigator> -->
 
-           <navigator class="item" url="/pages/account" style="border-bottom: thin solid #F5F5F5;">
+           <navigator class="item" url="/pages/account" style="border-bottom: thin solid #F5F5F5;margin-top:20rpx;margin-bottom:20rpx;">
             <view class="left">
               <image class="icon" src="../images/M_account.png"/>
               <view class="label">账户管理</view>

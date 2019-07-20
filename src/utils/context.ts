@@ -65,13 +65,13 @@ export class Context {
         // 提前注册好重要的资产，避免测试网络或者主网里出现同名的
         let neo = new Asset('NEO', id_NEO);
         let gas = new Asset('GAS', id_GAS);
-        let CGAS = new Asset('CGAS', DAPP_CGAS.toString(), 0);
-        let nnc = new Asset('NNC', DAPP_NNC.toString(), 0);
+        // let CGAS = new Asset('CGAS', DAPP_CGAS.toString(), 0);
+        // let nnc = new Asset('NNC', DAPP_NNC.toString(), 0);
 
         Context.Assets['NEO'] = neo;
         Context.Assets['GAS'] = gas;
-        Context.Assets['CGAS'] = CGAS;
-        Context.Assets['NNC'] = nnc;
+        // Context.Assets['CGAS'] = CGAS;
+        // Context.Assets['NNC'] = nnc;
         console.log(Context.Assets)
 
         // 获取链上所有资产

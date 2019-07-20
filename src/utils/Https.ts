@@ -4,7 +4,7 @@ let hotapp = require('./hotapp.js');
 export default class Https {
     static api: string = "https://api.nel.group/api/testnet";
     static priceHost: string = "https://api.coinmarketcap.com/v1/ticker/";
-    static proxy_server: string = "http://112.74.52.116/";
+    static proxy_server: string = "http://47.111.111.217/";
     // 交易通知模板id
     static templet_id: string = "2lEt8hQIzI6tbTw9ThtZhNalDG6GulckpcYEs_Ki7ZQ";
 
@@ -158,9 +158,12 @@ export default class Https {
     static async rpc_postRawTransaction(data: Uint8Array) {
         var postdata = this.makeRpcPostBody("sendrawtransaction", Helper.toHexString(data));
         var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.api } }, this.proxy_server + "proxy.php");
+        console.log('==========');
         console.log(result);
         try {
-            var r = result["result"][0] as boolean;
+            var r = result["result"][0]['txid'];
+            console.log('result')
+            console.log(r);
             return r;
         } catch (error) {
             return null;

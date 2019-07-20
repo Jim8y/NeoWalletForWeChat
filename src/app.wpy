@@ -196,12 +196,12 @@
             iconPath: 'images/Transfer.png',
             selectedIconPath: 'images/Transfer_s.png'
           },
-          {
-            pagePath: 'pages/nns',
-            text: 'NNS',
-            iconPath: 'images/NNS.png',
-            selectedIconPath: 'images/NNS_s.png'
-          },
+          // {
+          //   pagePath: 'pages/nns',
+          //   text: 'NNS',
+          //   iconPath: 'images/NNS.png',
+          //   selectedIconPath: 'images/NNS_s.png'
+          // },
           {
             pagePath: 'pages/mine',
             text: '个人',

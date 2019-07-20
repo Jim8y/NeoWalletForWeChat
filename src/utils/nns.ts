@@ -42,34 +42,36 @@ export default class NNS {
      * 域名查询及校验
      * @param domain 二级域名
      */
-    static async  verifyDomain(domain: string): Promise<DomainInfo> {
-        if (domain.includes('.neo')) {
-            domain = domain.substring(0, domain.length - 4);
-        }
-        console.log(domain);
-        domain = domain.toLowerCase().trim();
-        let verify = /^[a-zA-Z0-9]{1,32}$/;
-        if (verify.test(domain)) {
-            console.log(domain + '.' + DOMAIN_ROOT)
-            let doamininfo: DomainInfo = await NNS.queryDomainInfo(domain + '.' + DOMAIN_ROOT);
-            console.log(doamininfo)
+    static async  verifyDomain(domain: string) {
 
-            if (doamininfo.register !== null && doamininfo.ttl !== null) {
-                var timestamp = new Date().getTime();
-                let copare = new Neo.BigInteger(timestamp).compareTo(new Neo.BigInteger(doamininfo.ttl).multiply(1000));
-                if (copare < 0) {
-                    // console.log('域名已到期');
-                    doamininfo.state = DomainState.open;
-                } else {
-                    doamininfo.state = DomainState.end1;
-                }
-            } else {
-                doamininfo.state = DomainState.open;
-            }
-            return doamininfo;
-        } else {
-            return null;
-        }
+        return await Https.api_getdomaininfo(domain);
+        // if (domain.includes('.neo')) {
+        //     domain = domain.substring(0, domain.length - 4);
+        // }
+        // console.log(domain);
+        // domain = domain.toLowerCase().trim();
+        // let verify = /^[a-zA-Z0-9]{1,32}$/;
+        // if (verify.test(domain)) {
+        //     console.log(domain + '.' + DOMAIN_ROOT)
+        //     let doamininfo: DomainInfo = await NNS.queryDomainInfo(domain + '.' + DOMAIN_ROOT);
+        //     console.log(doamininfo)
+
+        //     if (doamininfo.register !== null && doamininfo.ttl !== null) {
+        //         var timestamp = new Date().getTime();
+        //         let copare = new Neo.BigInteger(timestamp).compareTo(new Neo.BigInteger(doamininfo.ttl).multiply(1000));
+        //         if (copare < 0) {
+        //             // console.log('域名已到期');
+        //             doamininfo.state = DomainState.open;
+        //         } else {
+        //             doamininfo.state = DomainState.end1;
+        //         }
+        //     } else {
+        //         doamininfo.state = DomainState.open;
+        //     }
+        //     return doamininfo;
+        // } else {
+        //     return null;
+        // }
     }
 
 
@@ -119,8 +121,7 @@ export default class NNS {
             // dmInfo.auctionState =
             // return null;
         }
-           
-        return await Https.api_getdomaininfo(dm) as DomainInfo;
+        return await NNS.queryDomainInfo(domain);
     }
     /**
      * @method 查询域名信息

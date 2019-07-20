@@ -1,7 +1,7 @@
 
 let hotapp = require('./hotapp.js');
 
-let proxy = false;
+let proxy = true;
 
 export async function wxRequest(params = {}, url) {
   let res = await this.Request(params, url);

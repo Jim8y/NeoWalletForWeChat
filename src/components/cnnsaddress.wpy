@@ -122,7 +122,9 @@
       this.showLower = false;
       console.log('is a domain');
       let domain = await Util.get.addrByDomain(address);
-      if (domain !== null) {
+      if (domain !== null && domain.owner !== null) {
+        console.log('domain===')
+        console.log(domain)
         this.addr = domain.address;
         this.showLower = true;
         this.address = domain.address;
@@ -130,6 +132,8 @@
           'address': domain.address,
           'domain': address
         });
+      } else {
+        this.showLower = false;
       }
       this.$apply();
     }

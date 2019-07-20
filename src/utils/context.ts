@@ -182,7 +182,7 @@ export class Context {
 
         let that = this;
         let total: number = 0;
-
+        
         for (let key in Context.Assets) {
 
             const coin = await Https.api_getCoinPrice((Context.Assets[key] as Asset).name);

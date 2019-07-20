@@ -254,9 +254,7 @@
     }
     async onShow() {
       let that = this;
-
       this.notify('数据更新中...');
-      
       //update the height regularly
       Emitter.register(TaskType.height, (height) => {
         that.Block = height;
@@ -269,8 +267,6 @@
     // 页面渲染完成
     async onReady() {
       await this.OnLogin();
-
-      
     }
     async OnLogin() {
       let that = this;
@@ -307,13 +303,17 @@
       Emitter.register(TaskType.asset, assets => {
         assets['GAS'].amount = parseFloat(assets['GAS'].amount).toFixed(4);
         assets['NEO'].amount = parseFloat(assets['NEO'].amount).toFixed(0);
+        console.log(assets);
         that.$invoke('cassets', 'LoadCoins', assets);
-        that.total = Util.get.total().toFixed(2);
         that.claim = Util.get.claim();
         that.isLoading = false;
         that.$apply();
         // console.log(that.claim);
         that.onShowAsset();
+      });
+      Emitter.register(TaskType.wealth, wealth => {
+        that.total = wealth.toFixed(2);
+        that.$apply();
       });
     }
     async onPullDownRefresh() {

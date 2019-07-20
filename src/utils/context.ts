@@ -36,14 +36,15 @@ export class Context {
     static claim: Claims;
 
     static user: UserInfo = null;
+    static assetLock:boolean = false; // Loack to speedup the startup speed
 
     static notity() {
         //注册监听事件
-        Emitter.register(TaskType.asset, (observer: Function, address: string = null) => {
+        Emitter.register(TaskType.asset, (address: string = null) => {
             console.log('Emitter asset update')
             console.log(address)
             // 获取资产之后立即进行价格的更新
-            Context.OnGetAssets(observer, address);
+            Context.OnGetAssets(address);
         }, this);
 
         Emitter.register(TaskType.tx, (task: Task) => {
@@ -87,6 +88,7 @@ export class Context {
     static async OnTimeOut() {
         //周期更新高度
         Context.OnGetHeight();
+        Context.OnGetAssets();
     }
 
     /**
@@ -111,7 +113,7 @@ export class Context {
     /**
      * 获取账户资产信息 UTXO
      */
-    static async OnGetAssets(observer: Function, address = null) {
+    static async OnGetAssets(address = null) {
         let that = this;
         //加锁，避免多个网络请求导致的刷新竞争
         if (this.lock === true) return;
@@ -144,8 +146,8 @@ export class Context {
 
         try {
             var utxos = await Https.api_getUTXO(address ? address : Context.getAccount().address);
-            console.log('============================================')
-            console.log(utxos)
+            // console.log('============================================')
+            // console.log(utxos)
             for (var i in utxos) {
                 var item = utxos[i];
                 let utxo: Utxo = new Utxo(item);
@@ -168,15 +170,18 @@ export class Context {
 
         //设置默认转账币种
         Transfer.coin = assets['NEO'];
-        console.log(assets)
-        observer(assets);
-        Context.OnGetPrice(observer);
+        if(!Context.assetLock)
+        { 
+            Emitter.fire(TaskType.asset,Context.Assets);
+            Context.assetLock=true;
+        }
+        Context.OnGetPrice();
     }
 
     /**
      * 获取市场价格
      */
-    static async OnGetPrice(observer: Function) {
+    static async OnGetPrice() {
 
         let that = this;
         let total: number = 0;
@@ -200,8 +205,9 @@ export class Context {
             } catch (err) {
             }
         }
-        observer(Context.Assets);
+        // observer(Context.Assets);
         Emitter.fire(TaskType.asset,Context.Assets);
+        Emitter.fire(TaskType.wealth,total);
     }
 
     /**

@@ -147,8 +147,8 @@ export class Context {
 
         try {
             var utxos = await Https.api_getUTXO(address ? address : Context.getAccount().address);
-            // console.log('============================================')
-            // console.log(utxos)
+            console.log('==================utxos==========================')
+            console.log(utxos)
             for (var i in utxos) {
                 var item = utxos[i];
                 let utxo: Utxo = new Utxo(item);

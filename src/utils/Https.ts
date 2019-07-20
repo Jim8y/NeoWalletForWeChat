@@ -226,7 +226,7 @@ export default class Https {
         var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.api } }, this.proxy_server + "proxy.php");
         // var result = await Request.wxRequest({ "method": "post", "body":JSON.stringify(postdata)}, this.rpc);
         try {
-            return result["result"];
+            return result["result"] as boolean;
         } catch (error) {
             // console.log(error);
             return null;

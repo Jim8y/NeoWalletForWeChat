@@ -24,7 +24,9 @@ export default class Transfer {
     tran = await Transfer.sign(tran);
     let txid = Helper.toHexString(Helper.clone(tran.GetHash()).reverse())
     Tips.loading('交易发送中');
-    const res = await Https.rpc_postRawTransaction(tran.GetRawData());
+    // const res = await Https.rpc_postRawTransaction(tran.GetRawData());
+    const res = await Https.rpc_RawTransaction(tran.GetRawData());
+    
     // console.log(Helper.toHexString(tran.GetRawData()))
     // console.log(res)
     return res ? txid : null;

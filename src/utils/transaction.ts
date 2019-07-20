@@ -25,9 +25,8 @@ export default class Transfer {
     let txid = Helper.toHexString(Helper.clone(tran.GetHash()).reverse())
     Tips.loading('交易发送中');
     const res = await Https.rpc_postRawTransaction(tran.GetRawData());
-    Tips.loaded();
-    console.log(Helper.toHexString(tran.GetRawData()))
-    console.log(res)
+    // console.log(Helper.toHexString(tran.GetRawData()))
+    // console.log(res)
     return res ? txid : null;
   }
 

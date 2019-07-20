@@ -126,7 +126,7 @@
       if (domain !== null && domain.maxBuyer !== null) {
         this.addr = domain['maxBuyer'];//address;
         this.showLower = true;
-        this.address = address//domain.address;
+        this.address = domain['maxBuyer']//domain.address;
         this.addrres = JSON.stringify({
           'address': domain['maxBuyer'],
           'domain': address

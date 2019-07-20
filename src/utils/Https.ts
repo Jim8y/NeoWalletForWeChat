@@ -161,11 +161,13 @@ export default class Https {
         console.log('==========');
         console.log(result);
         try {
-            var r = result["result"][0]['txid'];
-            console.log('result')
+            var r = result["result"];//[0];//['txid'];
+            console.log('==========2');
+            console.log('result:')
             console.log(r);
             return r;
         } catch (error) {
+            console.log('==========3');
             return null;
         }
     }
@@ -225,7 +227,8 @@ export default class Https {
      */
     static async rpc_getAddressTXs(addr: string, max: number = 20, page: number = 1) {
         var postdata = this.makeRpcPostBody("getaddresstxs", addr, max, page);
-        var result = await Request.wxRequest({ "method": "post", "body": JSON.stringify(postdata) }, this.api);
+        var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.api_scan }}, this.proxy_server + "proxy.php");
+        // var result = await Request.wxRequest({ "method": "post", "body": }, this.proxy_server + "proxy.php");
         try {
             return result["result"];
         } catch (error) {

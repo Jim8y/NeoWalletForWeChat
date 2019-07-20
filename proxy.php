@@ -3,9 +3,8 @@
     $url = $_POST['server'];
     $json = json_decode($data,true);
  
-    $post_data = "jsonrpc=2.0&id=1&method=sendrawtransaction&params=%5B%22";
-    $post_data = $post_data.$json['params'][0]."%22%5D";
-    echo $post_data;
+    $post_data = "jsonrpc=2.0&id=1&method=".$json['method']."&params=".urlencode(json_encode($json['params']));
+    // echo $post_data;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, 1);

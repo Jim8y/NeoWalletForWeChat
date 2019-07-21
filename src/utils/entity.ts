@@ -54,7 +54,7 @@ export class Asset {
             //判断交易高度是否已经超过两个 判断交易失败，spent状态取消
             this.utxos[utxo.txid] = utxo;
         }
-        this.amount = ((parseFloat(this.amount) + utxo.count) as number).toFixed(8);
+        // this.amount = ((parseFloat(this.amount) + utxo.count) as number).toFixed(8);
     }
 
     /**
@@ -110,8 +110,6 @@ export class Utxo {
     constructor(utxo: any) {
         this.txid = utxo.txid;
         this.n = utxo.n;
-        this.asset = utxo.asset;
-        this.addr = utxo.addr;
         this.count = parseFloat(utxo.value);
     }
 }

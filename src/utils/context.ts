@@ -36,7 +36,7 @@ export class Context {
     static claim: Claims;
 
     static user: UserInfo = null;
-    static assetLock:boolean = false; // Loack to speedup the startup speed
+    static assetLock: boolean = false; // Loack to speedup the startup speed
 
     static notity() {
         //注册监听事件
@@ -146,18 +146,27 @@ export class Context {
         }
 
         try {
-            var utxos = await Https.api_getUTXO(address ? address : Context.getAccount().address);
+            var assets_bal = await Https.api_getUTXO(address ? address : Context.getAccount().address);
             console.log('==================utxos==========================')
-            console.log(utxos)
-            for (var i in utxos) {
-                var item = utxos[i];
-                let utxo: Utxo = new Utxo(item);
-                let type = Coin.assetID2name[utxo.asset];
-                if (Context.Assets[type] === undefined) {
-                    Context.Assets[type] = new Asset(type, utxo.asset);
+            console.log(assets_bal)
+            for (var i in assets_bal) {
+                var utxos = assets_bal[i]['unspent'];
+                let type = assets_bal[i]['asset'];
+                Context.Assets[type].amount = assets_bal[i]['amount'];
+                for (var index in utxos) {
+                    let item = utxos[index];
+                    let utxo: Utxo = new Utxo(item);
+                    // let type = Coin.assetID2name[utxo.asset];
+                    if (Context.Assets[type] === undefined) {
+                        Context.Assets[type] = new Asset(type, utxo.asset);
+                    }
+                    if (Context.Assets[type] !== null)
+                        (Context.Assets[type] as Asset).addUTXO(utxo);
                 }
-                if (Context.Assets[type] !== null)
-                    (Context.Assets[type] as Asset).addUTXO(utxo);
+                //                 "asset_hash": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
+                // "asset": "GAS",
+                // "asset_symbol": "GAS",
+                // "amount": 29060.02316479
             }
         } catch (error) {
             console.error(error);
@@ -208,8 +217,8 @@ export class Context {
         }
         // observer(Context.Assets);
 
-        Emitter.fire(TaskType.asset,Context.Assets);
-        Emitter.fire(TaskType.wealth,total);
+        Emitter.fire(TaskType.asset, Context.Assets);
+        Emitter.fire(TaskType.wealth, total);
     }
 
     /**

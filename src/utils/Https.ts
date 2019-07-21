@@ -1,5 +1,6 @@
 import * as Request from './wxRequest';
 import { Helper } from '../lib/neo-ts/index';
+import { readSync } from 'fs';
 let hotapp = require('./hotapp.js');
 export default class Https {
     static api: string = "https://api.nel.group/api/testnet";
@@ -87,10 +88,11 @@ export default class Https {
     }
 
     static async api_getUTXO(address) {
-        var str = this.makeRpcUrl(this.api, "getutxo", address);
+        var str = this.makeRpcUrl(this.api_raw, "getunspents", address);
         var result = await Request.wxRequest({ "method": "get" }, str);
         try {
-            return result["result"];
+            console.log(result)
+            return result['result']["balance"];
         } catch (error) {
             // console.log(error);
             return null;
@@ -182,7 +184,7 @@ export default class Https {
         console.log('get block info')
         console.log(result);
         try {
-            return ;
+            return result['result'] as boolean;
         } catch (error) {
             return null
         }

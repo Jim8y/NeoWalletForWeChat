@@ -6,12 +6,12 @@ export default class Https {
     static api: string = "https://api.nel.group/api/testnet";
     static priceHost: string = "https://api.coinmarketcap.com/v1/ticker/";
     static proxy_server: string = "http://47.111.111.217/";
-    static api_raw:string = "http://seed6.ngd.network:20332";
+    static api_raw: string = "http://seed6.ngd.network:20332";
     // 交易通知模板id
     static templet_id: string = "2lEt8hQIzI6tbTw9ThtZhNalDG6GulckpcYEs_Ki7ZQ";
 
     static apiaggr: string = "https://apiscan.nel.group/api/testnet";//"http://seed1.nether.top:12122"//
-    static api_scan:string ="https://apiscan.nel.group/api/testnet";
+    static api_scan: string = "https://apiscan.nel.group/api/testnet";
     /**
      * create Rpc Url
      * @param url string
@@ -178,8 +178,8 @@ export default class Https {
     /**
      * Get 方式发送交易
      */
-    static async rpc_RawTransaction( data: Uint8Array){
-        var str = Https.makeRpcUrl(Https.api_raw, "sendrawtransaction",Helper.toHexString(data));
+    static async rpc_RawTransaction(data: Uint8Array) {
+        var str = Https.makeRpcUrl(Https.api_raw, "sendrawtransaction", Helper.toHexString(data));
         var result = await Request.wxRequest({ "method": "get" }, str);
         console.log('get block info')
         console.log(result);
@@ -243,7 +243,7 @@ export default class Https {
      */
     static async rpc_getAddressTXs(addr: string, max: number = 20, page: number = 1) {
         var postdata = this.makeRpcPostBody("getaddresstxs", addr, max, page);
-        var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.api_scan }}, this.proxy_server + "proxy.php");
+        var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.api_scan } }, this.proxy_server + "proxy.php");
         // var result = await Request.wxRequest({ "method": "post", "body": }, this.proxy_server + "proxy.php");
         try {
             return result["result"];
@@ -257,13 +257,13 @@ export default class Https {
      * @param address 地址
      */
     static async api_getclaimgas(address: string, type: number) {
-        if (type)
-            var str = this.makeRpcUrl(this.api, "getclaimgas", address, type);
-        else
-            var str = this.makeRpcUrl(this.api, "getclaimgas", address);
+        // if (type)
+        //     var str = this.makeRpcUrl(this.api, "getclaimable", address, type);
+        // else
+        var str = this.makeRpcUrl(this.api, "getclaimable", address);
         var result = await Request.wxRequest({ "method": "get" }, str);
         try {
-            return result["result"][0];
+            return result["result"]['unclaimed'];
         } catch (error) {
             // console.log(error);
             return null;

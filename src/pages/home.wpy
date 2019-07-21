@@ -314,6 +314,13 @@
         that.$apply();
         that.onShowAsset();
       });
+      Emitter.register(TaskType.claim, claimgas => {
+        // api_getclaimgas
+        that.claim = {
+          total: claimgas
+        };
+        that.$apply();
+      })
     }
     async onPullDownRefresh() {
       if (this.isLoading) return;

@@ -108,9 +108,16 @@ export class Context {
             Context.Height = height;
         }
         Emitter.fire(TaskType.height, height);
+        // in the mean time, get claimable
+        Context.OnGetClaimable();
         return height;
     }
 
+    static async OnGetClaimable() {
+        let res = await Https.api_getclaimgas(Wallet.account.address, 0);
+        if (res !== null && res !== undefined)
+            Emitter.fire(TaskType.claim, res);
+    }
     /**
      * 获取账户资产信息 UTXO
      */
@@ -147,8 +154,8 @@ export class Context {
 
         try {
             var assets_bal = await Https.api_getUTXO(address ? address : Context.getAccount().address);
-            console.log('==================utxos==========================')
-            console.log(assets_bal)
+            // console.log('==================utxos==========================')
+            // console.log(assets_bal)
             for (var i in assets_bal) {
                 var utxos = assets_bal[i]['unspent'];
                 let type = assets_bal[i]['asset'];
@@ -163,10 +170,6 @@ export class Context {
                     if (Context.Assets[type] !== null)
                         (Context.Assets[type] as Asset).addUTXO(utxo);
                 }
-                //                 "asset_hash": "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7",
-                // "asset": "GAS",
-                // "asset_symbol": "GAS",
-                // "amount": 29060.02316479
             }
         } catch (error) {
             console.error(error);
@@ -180,11 +183,6 @@ export class Context {
 
         //设置默认转账币种
         Transfer.coin = assets['NEO'];
-        // if(!Context.assetLock)
-        // { 
-        //     Emitter.fire(TaskType.asset,Context.Assets);
-        //     Context.assetLock=true;
-        // }
         Context.OnGetPrice();
     }
 

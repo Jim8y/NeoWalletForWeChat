@@ -16,18 +16,20 @@
 ## ScreenCapture
 <!-- ### New Version -->
 <div>
-<img src="./img/index0.png" width="200" alt="首页"/>
-<img src="./img/index1.png" width="200" alt="首页"/>
-<img src="./img/index2.png" width="200" alt="首页"/>
-<img src="./img/home.png" width="200" alt="首页"/>
+<img src="./img/1.png" width="200" alt="首页"/>
+<img src="./img/2.png" width="200" alt="首页"/>
+<img src="./img/3.png" width="200" alt="首页"/>
+<img src="./img/4.png" width="200" alt="首页"/>
 </div>
 <div>
-<img src="./img/send.png" width="200" alt="首页"/>
-<img src="./img/receive.png" width="200" alt="首页"/>
-<img src="./img/nns.png" width="200" alt="首页"/>
-<img src="./img/history.png" width="200" alt="首页"/>
+<img src="./img/5.png" width="200" alt="首页"/>
+<img src="./img/6.png" width="200" alt="首页"/>
+<img src="./img/7.png" width="200" alt="首页"/>
+<img src="./img/8.png" width="200" alt="首页"/>
 </div>
-
+<div>
+<img src="./img/9.png" width="200" alt="首页"/>
+</div>
 <!-- ### Old Version
 <div>
 <img src="./img/index.JPG" width="200" alt="首页"/>

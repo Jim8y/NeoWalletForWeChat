@@ -114,9 +114,12 @@ export class Context {
     }
 
     static async OnGetClaimable() {
-        let res = await Https.api_getclaimgas(Wallet.account.address, 0);
-        if (res !== null && res !== undefined)
-            Emitter.fire(TaskType.claim, res);
+        try {
+            let res = await Https.api_getclaimgas(Wallet.account.address, 0);
+            if (res !== null && res !== undefined)
+                Emitter.fire(TaskType.claim, res);
+        } catch (error) {
+        }
     }
     /**
      * 获取账户资产信息 UTXO

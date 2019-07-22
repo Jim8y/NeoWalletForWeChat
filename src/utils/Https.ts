@@ -414,82 +414,12 @@ export default class Https {
 
     }
 
-    //获取地址下所有的域名
-    static async getnnsinfo(...params): Promise<string[]> {
-        // let data = params.join(',');
-        var postdata = Https.makeRpcPostBody("getdomainbyaddress", ...params);
-        var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.apiaggr } }, this.proxy_server + "proxy.php");
-        //  var result = await fetch(Https.apiaggr, { "method": "post", "body": JSON.stringify(postdata) });
-        // var json = await result.json();
-        if (result["result"] == null)
-            return null;
-        var r = result["result"]
-        return r;
-    }
 
-    static async delnnsinfo(domain: string) {
-        var str = Https.makeRpcUrl(Https.apiaggr, "delnnsinfo", domain);
-        // var result = await fetch(str, { "method": "get" });
-        var result = await Request.Request({ "method": "get" }, str);
-        // var json = await result.json();
-        if (result["result"] == null)
-            return null;
-        var r = result["result"][0]["result"]
-        return r;
-    }
-
-    /**
-     * 获取竞拍列表
-     * @param address 地址
-     */
-    static async api_getBidListByAddress(address: string) {
-        var postdata = Https.makeRpcPostBody("getbidlistbyaddress", address);
-        var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.apiaggr } }, this.proxy_server + "proxy.php");
-
-        try {
-            return result["result"];
-        } catch (error) {
-            return null;
-        }
-    }
-    /**
-     * 根据域名查询竞拍详情
-     * @param domain 域名
-     * @param currentpage 
-     * @param pagesize 
-     */
-    static async api_getBidDetail(id: string, currentpage: number, pagesize: number) {
-        var postdata = Https.makeRpcPostBody("getbiddetailbydomain", id, currentpage, pagesize);
-        console.log(postdata)
-        var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.apiaggr } }, this.proxy_server + "proxy.php");
-        console.log('bid info')
-        console.log(result)
-        try {
-            return result["result"];
-        } catch (error) {
-            // console.log(error);
-            return null;
-        }
-    }
+ 
 
 
-    /**
-     * 我的域名的状态
-     * @param address 地址
-     * @param domain 域名
-     */
-    static async getDomainState(address: string, id: string) {
-        var postdata = Https.makeRpcPostBody("getdomainstate", address, id);
-        // var result = await fetch(WWW.apiaggr, { "method": "post", "body": JSON.stringify(postdata) });
-        var result = await Request.wxRequest({ "method": "post", "body": { 'tx': JSON.stringify(postdata), 'server': this.apiaggr } }, this.proxy_server + "proxy.php");
-        // var json = await result.json();
-        try {
-            var r = result["result"][0];
-            return r;
-        } catch (err) {
-            return null;
-        }
-    }
+
+
     //查询domain竞拍情况
     static async api_getdomaininfo(domainname: string) {
         var postdata = Https.makeRpcPostBody("searchbydomain", domainname);

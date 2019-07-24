@@ -157,7 +157,6 @@
         'pages/send',
         'pages/history',
         'pages/mine',
-        'pages/nns',
         'pages/transaction',
         'pages/watchonly',
         'pages/watch',

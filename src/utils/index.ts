@@ -7,19 +7,14 @@ import Tips from './tip';
 import Transfer from './transaction';
 import Cache from './cache';
 import Wallet from './wallet';
-import Auction from './auctioin';
 import { Asset, WatchOnlyAccount } from './entity';
-import NNSSell from './nnssell';
 import Emitter from './Emitter';
-import MyDomains from './mydomain';
 import WatchOnlyManager from './watchonly';
 
 export default {
-    auction: NNSSell,
     wallet: Wallet,
     Emitter: Emitter,
     const: Const,
-    myDomain: MyDomains,
     watchOnly: WatchOnlyManager,
     show: {
         loading: Tips.loading,
@@ -56,12 +51,7 @@ export default {
         sendCoin: () => { return Transfer.coin },
         sendAddr: () => { return Transfer.address },
         addrByDomain: async (domain: string) => { return await NNS.verifyDomain(domain) },
-        domainByAddr: NNS.getDomainsByAddr,
         wif: Wallet.prikey2Wif,
-        domainState: Auction.queryDomainState,
-        root: async () => { NNS.getRoot() },
-        myDomain: MyDomains.getAllNeoName,
-        bidInfo: Auction.getBidDetail,
         watchonly: WatchOnlyManager.getAll
     },
     set: {
@@ -81,7 +71,6 @@ export default {
     init: {
         asset: Coin.initAllAsset,
         context: Context.init,
-        nns: NNS.initRootDomain,
         notity: Context.notity
     },
     service: {
@@ -89,7 +78,6 @@ export default {
         update: Context.OnTimeOut,
     },
     reg: {
-        domain: NNS.nnsRegister,
         test: () => {
             // // console.log('[[[[[[[[[[[[[[[[[[[[[[[');
 

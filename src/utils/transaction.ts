@@ -62,6 +62,7 @@ export default class Transfer {
     if (asset.isnep5)
       return await Transfer.nep5Transaction(targetaddr, asset, sendcount + '');
     else {
+      // console.log(targetaddr);
       let tran = await Transfer.makeTran(targetaddr, asset, sendcount);
       return await Transfer.signAndSend(tran);
     }
@@ -94,8 +95,8 @@ export default class Transfer {
       input["_addr"] = utxo.addr;
       tran.inputs.push(input);
     }
-    console.log(pay.sum)
-    console.log(sendcount)
+    // console.log(pay.sum)
+    // console.log(sendcount)
     if (pay.sum >= sendcount)//输入大于等于输出
     {
       tran.outputs = [];
@@ -117,7 +118,7 @@ export default class Transfer {
       if (change > 0) {
         var outputchange = new ThinNeo.TransactionOutput();
         //找零地址设置为自己
-        outputchange.toAddress = Helper.Account.GetPublicKeyScriptHash_FromAddress(pay.utxos[0].addr);
+        outputchange.toAddress = Helper.Account.GetPublicKeyScriptHash_FromAddress( Wallet.account.address);
         //设置找零额度
         outputchange.value = Neo.Fixed8.parse(change + '');
         //找零资产类型
@@ -129,8 +130,8 @@ export default class Transfer {
     else {
       throw new Error("no enough money.");
     }
-    console.log('transactions')
-    console.log(tran);
+    // console.log('transactions')
+    // console.log(tran);
     return tran;
   }
 
@@ -261,7 +262,7 @@ export default class Transfer {
       Tips.loading('加载中...');
       for (let index = 0; index < res.length; index++) {
         const tx = res[index];
-        console.log(tx)
+        // console.log(tx)
         let txid = tx["txid"] as string;
         txid = txid.replace('0x', '');
         let vins = tx["vin"];

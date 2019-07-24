@@ -238,7 +238,7 @@
       deciphered(e) {
         // 密钥解析成功之后再进行具体操作
         let prikey = e.prikey;
-        console.log('prikey = ' + prikey)
+        // console.log('prikey = ' + prikey)
         if (prikey === 'fail' || prikey === null || prikey === '') {
           Util.show.error('密码错误');
         }
@@ -307,6 +307,8 @@
     async SendTran() {
       var count = parseFloat(this.amount + '');
       Util.show.loading('交易生成中');
+      // console.log(this.targetAddr);
+      
       let txid = await Util.send.transfer(
         this.targetAddr,
         this.coin.name,

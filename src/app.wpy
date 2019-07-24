@@ -142,6 +142,7 @@
   import 'wepy-async-function';
   import Util from './utils/index';
   import Https from './utils/Https'
+  import  {checkUpdateVersion} from './utils/update'
   export default class extends wepy.app {
     config = {
       pages: [
@@ -216,6 +217,7 @@
     // }
     onLaunch() {
       const that = this;
+      checkUpdateVersion();
       // 登陆获取用户code
       wx.login({
         success: async function(res) {

@@ -1,9 +1,4 @@
 # NEO wallet for WeChat mini program
-================
-
-This project is developed with the help and support from [NEL](https://github.com/NewEconoLab/) community. Join the community and learn NEO developing at:
-- 点击链接加入群【NEO开发 从入门到放弃】：https://jq.qq.com/?_wv=1027&k=5erIkal
-- 点击链接加入群【NEL区块链技术交流】：https://jq.qq.com/?_wv=1027&k=57bF3he
 
 ## Mini Program QRCode
 
@@ -19,21 +14,25 @@ This project is developed with the help and support from [NEL](https://github.co
 - 代码瘦身，将SDK中与node库重复的功能模块删除减小项目大小 当前大小：500k 预计瘦身后大小 400k
 
 ## ScreenCapture
-### New Version
+<!-- ### New Version -->
 <div>
-<img src="./img/index0.png" width="200" alt="首页"/>
-<img src="./img/index1.png" width="200" alt="首页"/>
-<img src="./img/index2.png" width="200" alt="首页"/>
-<img src="./img/home.png" width="200" alt="首页"/>
+<img src="./img/1.png" width="200" alt="首页"/>
+<img src="./img/2.png" width="200" alt="首页"/>
+<img src="./img/3.png" width="200" alt="首页"/>
+<img src="./img/10.png" width="200" alt="首页"/>
 </div>
 <div>
-<img src="./img/send.png" width="200" alt="首页"/>
-<img src="./img/receive.png" width="200" alt="首页"/>
-<img src="./img/nns.png" width="200" alt="首页"/>
-<img src="./img/history.png" width="200" alt="首页"/>
+<img src="./img/4.png" width="200" alt="首页"/>
+<img src="./img/5.png" width="200" alt="首页"/>
+<img src="./img/6.png" width="200" alt="首页"/>
+<img src="./img/7.png" width="200" alt="首页"/>
 </div>
+<div>
+<img src="./img/8.png" width="200" alt="首页"/>
+<img src="./img/9.png" width="200" alt="首页"/>
 
-### Old Version
+</div>
+<!-- ### Old Version
 <div>
 <img src="./img/index.JPG" width="200" alt="首页"/>
 <img src="./img/send.JPG" width="200" alt="转账"/>
@@ -45,7 +44,7 @@ This project is developed with the help and support from [NEL](https://github.co
 <img src="./img/vin.JPG" width="200" alt="交易输入"/>
 <img src="./img/vout.JPG" width="200" alt="交易输出"/>
 <img src="./img/mine.JPG" width="200" alt="个人"/>
-</div>
+</div> -->
 
 ## Usage
 
@@ -93,6 +92,9 @@ wepy build --watch
 Please note that the open source protocol for this repository is **MIT**. This means that you have the freedom to run, copy, modify and distribute the software. 
 
 ## Author
+This project is originally developed with the help and support from [NEL](https://github.com/NewEconoLab/) community. Join the community and learn NEO developing at:
+- 点击链接加入群【NEO开发 从入门到放弃】：https://jq.qq.com/?_wv=1027&k=5erIkal
+- 点击链接加入群【NEL区块链技术交流】：https://jq.qq.com/?_wv=1027&k=57bF3he
 
 - Jinghui Liao <jinghui@wayne.edu>
 

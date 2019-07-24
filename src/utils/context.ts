@@ -36,14 +36,15 @@ export class Context {
     static claim: Claims;
 
     static user: UserInfo = null;
+    static assetLock: boolean = false; // Loack to speedup the startup speed
 
     static notity() {
         //注册监听事件
-        Emitter.register(TaskType.asset, (observer: Function, address: string = null) => {
-            console.log('Emitter asset update')
-            console.log(address)
+        Emitter.register(TaskType.asset, (address: string = null) => {
+            // console.log('Emitter asset update')
+            // console.log(address)
             // 获取资产之后立即进行价格的更新
-            Context.OnGetAssets(observer, address);
+            // Context.OnGetAssets(address);
         }, this);
 
         Emitter.register(TaskType.tx, (task: Task) => {
@@ -51,27 +52,24 @@ export class Context {
         }, this);
 
         Emitter.register(TaskType.history, (observer, address: string = null) => {
-            Context.OnGetTXs(observer,address);
+            Context.OnGetTXs(observer, address);
         }, this);
 
         Emitter.register(TaskType.claim, (observer) => {
             Context.OnGetClaims(observer);
         }, this)
 
-        Emitter.register(TaskType.height, () => {
-            Context.OnGetHeight();
-        }, this)
 
         // 提前注册好重要的资产，避免测试网络或者主网里出现同名的
         let neo = new Asset('NEO', id_NEO);
         let gas = new Asset('GAS', id_GAS);
-        let CGAS = new Asset('CGAS', DAPP_CGAS.toString(), 0);
-        let nnc = new Asset('NNC', DAPP_NNC.toString(), 0);
+        // let CGAS = new Asset('CGAS', DAPP_CGAS.toString(), 0);
+        // let nnc = new Asset('NNC', DAPP_NNC.toString(), 0);
 
         Context.Assets['NEO'] = neo;
         Context.Assets['GAS'] = gas;
-        Context.Assets['CGAS'] = CGAS;
-        Context.Assets['NNC'] = nnc;
+        // Context.Assets['CGAS'] = CGAS;
+        // Context.Assets['NNC'] = nnc;
         console.log(Context.Assets)
 
         // 获取链上所有资产
@@ -82,6 +80,7 @@ export class Context {
     static async init(account: Nep6.nep6account) {
         Wallet.setAccount(account);
         Context.OnGetHeight();
+        Context.OnGetAssets();
     }
 
     /**
@@ -90,6 +89,7 @@ export class Context {
     static async OnTimeOut() {
         //周期更新高度
         Context.OnGetHeight();
+        Context.OnGetAssets();
     }
 
     /**
@@ -107,13 +107,24 @@ export class Context {
                 TaskManager.update(height as number);
             Context.Height = height;
         }
+        Emitter.fire(TaskType.height, height);
+        // in the mean time, get claimable
+        Context.OnGetClaimable();
         return height;
     }
 
+    static async OnGetClaimable() {
+        try {
+            let res = await Https.api_getclaimgas(Wallet.account.address, 0);
+            if (res !== null && res !== undefined)
+                Emitter.fire(TaskType.claim, res);
+        } catch (error) {
+        }
+    }
     /**
      * 获取账户资产信息 UTXO
      */
-    static async OnGetAssets(observer: Function, address = null) {
+    static async OnGetAssets(address = null) {
         let that = this;
         //加锁，避免多个网络请求导致的刷新竞争
         if (this.lock === true) return;
@@ -145,18 +156,23 @@ export class Context {
         }
 
         try {
-            var utxos = await Https.api_getUTXO(address ? address : Context.getAccount().address);
-            console.log('============================================')
-            console.log(utxos)
-            for (var i in utxos) {
-                var item = utxos[i];
-                let utxo: Utxo = new Utxo(item);
-                let type = Coin.assetID2name[utxo.asset];
-                if (Context.Assets[type] === undefined) {
-                    Context.Assets[type] = new Asset(type, utxo.asset);
+            var assets_bal = await Https.api_getUTXO(address ? address : Context.getAccount().address);
+            // console.log('==================utxos==========================')
+            // console.log(assets_bal)
+            for (var i in assets_bal) {
+                var utxos = assets_bal[i]['unspent'];
+                let type = assets_bal[i]['asset'];
+                Context.Assets[type].amount = assets_bal[i]['amount'];
+                for (var index in utxos) {
+                    let item = utxos[index];
+                    let utxo: Utxo = new Utxo(item);
+                    // let type = Coin.assetID2name[utxo.asset];
+                    if (Context.Assets[type] === undefined) {
+                        Context.Assets[type] = new Asset(type, utxo.asset);
+                    }
+                    if (Context.Assets[type] !== null)
+                        (Context.Assets[type] as Asset).addUTXO(utxo);
                 }
-                if (Context.Assets[type] !== null)
-                    (Context.Assets[type] as Asset).addUTXO(utxo);
             }
         } catch (error) {
             console.error(error);
@@ -170,39 +186,40 @@ export class Context {
 
         //设置默认转账币种
         Transfer.coin = assets['NEO'];
-        console.log(assets)
-        observer(assets);
-        // Context.OnGetPrice(observer);
+        Context.OnGetPrice();
     }
 
     /**
      * 获取市场价格
      */
-    static async OnGetPrice(observer: Function) {
+    static async OnGetPrice() {
 
         let that = this;
         let total: number = 0;
-
-        for (let key in Context.Assets) {
-
-            const coin = await Https.api_getCoinPrice((Context.Assets[key] as Asset).name);
-
+        let assets = ["NEO", "GAS"];
+        for (let key in assets) {
+            // console.log(assets[key])
+            let asset = assets[key];
+            const coin = await Https.api_getCoinPrice(asset);
             try {
                 // 更新价格
-                (Context.Assets[key] as Asset).price = parseFloat(coin[0]['price_cny']).toFixed(2);
-                let sum = (parseFloat((Context.Assets[key] as Asset).amount.toString())) *
+                (Context.Assets[asset] as Asset).price = parseFloat(coin[0]['price_cny']).toFixed(2);
+                let sum = (parseFloat((Context.Assets[asset] as Asset).amount.toString())) *
                     parseFloat(coin[0]['price_cny']);
                 total += sum;
                 // 更新资产
-                (Context.Assets[key] as Asset).total =
+                (Context.Assets[asset] as Asset).total =
                     sum.toFixed(2);
                 // 更新币市走向
-                if (coin[0]['percent_change_1h'][0] !== '-') (Context.Assets[key] as Asset).rise = true;
-                else (Context.Assets[key] as Asset).rise = false;
+                if (coin[0]['percent_change_1h'][0] !== '-') (Context.Assets[asset] as Asset).rise = true;
+                else (Context.Assets[asset] as Asset).rise = false;
             } catch (err) {
             }
-            observer(Context.Assets);
         }
+        // observer(Context.Assets);
+
+        Emitter.fire(TaskType.asset, Context.Assets);
+        Emitter.fire(TaskType.wealth, total);
     }
 
     /**

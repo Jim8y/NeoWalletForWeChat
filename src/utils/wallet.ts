@@ -46,7 +46,7 @@ export default class Wallet {
         const publicKey = Helper.Account.GetPublicKeyFromPrivateKey(privateKey);
         Tips.loading('地址计算中');
         const address = Helper.Account.GetAddressFromPublicKey(publicKey);
-
+        Tips.loaded();
         let account: Nep6.nep6account = new Nep6.nep6account();
         account.address = address;
         account.label = label;

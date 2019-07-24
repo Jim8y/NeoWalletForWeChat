@@ -217,7 +217,6 @@
     };
     mixins = [NotifyMixin];
     data = {
-      assets: {},
       user: {},
       total: '0.00',
       totalShow: '*.**',
@@ -253,11 +252,17 @@
       this.$apply();
     }
     async onShow() {
+      let that = this;
       this.notify('数据更新中...');
+      //update the height regularly
+      Emitter.register(TaskType.height, (height) => {
+        that.Block = height;
+        that.$apply();
+      }, this);
+      // Emitter.register(TaskType.asset,())
     }
     // 页面渲染完成
     async onReady() {
-      const that = this;
       await this.OnLogin();
     }
     async OnLogin() {
@@ -290,19 +295,32 @@
       this.$apply();
       let that = this;
       // 设置资产更新回调
-      Emitter.fire(TaskType.claim);
-      Emitter.fire(TaskType.asset, assets => {
+      // Emitter.fire(TaskType.claim);
+      // Emitter.register(TaskType.asset,ass)
+      Emitter.register(TaskType.asset, assets => {
         assets['GAS'].amount = parseFloat(assets['GAS'].amount).toFixed(4);
         assets['NEO'].amount = parseFloat(assets['NEO'].amount).toFixed(0);
+        // console.log('update asset:')
+        // console.log(assets);
         that.$invoke('cassets', 'LoadCoins', assets);
-        that.total = Util.get.total().toFixed(2);
-        that.Block = Util.get.height();
         that.claim = Util.get.claim();
         that.isLoading = false;
         that.$apply();
-        // console.log(that.claim);
+      });
+      Emitter.register(TaskType.wealth, wealth => {
+        that.total = wealth.toFixed(2);
+        if (wealth <= 0)
+          return;
+        that.$apply();
         that.onShowAsset();
       });
+      Emitter.register(TaskType.claim, claimgas => {
+        // api_getclaimgas
+        that.claim = {
+          total: claimgas
+        };
+        that.$apply();
+      })
     }
     async onPullDownRefresh() {
       if (this.isLoading) return;

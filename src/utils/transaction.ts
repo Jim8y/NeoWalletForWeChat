@@ -24,10 +24,11 @@ export default class Transfer {
     tran = await Transfer.sign(tran);
     let txid = Helper.toHexString(Helper.clone(tran.GetHash()).reverse())
     Tips.loading('交易发送中');
-    const res = await Https.rpc_postRawTransaction(tran.GetRawData());
-    Tips.loaded();
-    console.log(Helper.toHexString(tran.GetRawData()))
-    console.log(res)
+    // const res = await Https.rpc_postRawTransaction(tran.GetRawData());
+    const res = await Https.rpc_RawTransaction(tran.GetRawData());
+    
+    // console.log(Helper.toHexString(tran.GetRawData()))
+    // console.log(res)
     return res ? txid : null;
   }
 
@@ -252,18 +253,23 @@ export default class Transfer {
   static async history(address=null) {
 
     var currentAddress = address?address:Wallet.account.address;
-    var res = await Https.gettransbyaddress(currentAddress, 20, 1);
+    var res = await Https.rpc_getAddressTXs(currentAddress, 20, 1);
+    // console.log(res)
+    res = res[0]['list']
     if (res !== null && res.length > 0) {
       this.TXs = [];
+      Tips.loading('加载中...');
       for (let index = 0; index < res.length; index++) {
         const tx = res[index];
+        console.log(tx)
         let txid = tx["txid"] as string;
         txid = txid.replace('0x', '');
         let vins = tx["vin"];
         let type = tx["type"];
         let vouts = tx["vout"];
-        let value = tx["value"];
-        let txtype = tx["txType"];
+        // let value = tx["value"];
+        let txtype = type;
+        // console.log('-----1')
         if (txtype.search("Transaction") != -1) {
           txtype = txtype.replace('Transaction', '');
         }
@@ -271,15 +277,15 @@ export default class Transfer {
           txtype = 'Invocation'
         let assetType = tx["assetType"]
         let blockindex = tx["blockindex"];
-        let time: string = tx["blocktime"].includes("$date") ? JSON.parse(tx["blocktime"])["$date"] : tx["blocktime"] + "000";
+        let time: string =  tx["blocktime"]["$date"]// : tx["blocktime"] + "000";
         let date: string = formatTime(parseInt(time), 'Y/M/D h:m:s');
-
+        // console.log('-----3')
         if (type == "out") {
           if (vins && vins.length == 1) {
             let assetname = "";
             const vin = vins[0];
             let asset = vin["asset"];
-            let amount = value[asset];
+            // let amount = value[asset];
             let address = vin["address"];
             if (assetType == "utxo") {
               assetname = Coin.assetID2name[asset];
@@ -298,7 +304,7 @@ export default class Transfer {
             history.txid = txid;
             history.assetname = assetname;
             history.address = address;
-            history.value = parseFloat(amount).toString();
+            // history.value = parseFloat(amount).toString();
             history.txtype = txtype;
             history.type = type;
             history.vin = vins;
@@ -340,24 +346,25 @@ export default class Transfer {
             } else { currcount++ }
           }
           if (currcount == vouts.length) {
-            for (const asset in value) {
-              if (value.hasOwnProperty(asset)) {
-                const amount = value[asset];
+            // for (const asset in value) {
+            //   if (value.hasOwnProperty(asset)) {
+            //     const amount = value[asset];
 
-                let assetname = "";
-                if (assetType == "utxo")
-                  assetname = Coin.assetID2name[asset];
-                else {
-                  let nep5 = await Https.getNep5Asset(asset);
-                  assetname = nep5["name"];
-                }
+            //     let assetname = "";
+            //     if (assetType == "utxo")
+            //       assetname = Coin.assetID2name[asset];
+            //     else {
+            //       let nep5 = await Https.getNep5Asset(asset);
+            //       assetname = nep5["name"];
+            //     }
 
-                var assets = {}
-                assets[assetname] = amount;
-                arr[currentAddress] = assets;
-              }
-            }
+            //     var assets = {}
+            //     assets[assetname] = amount;
+            //     arr[currentAddress] = assets;
+            //   }
+            // }
           }
+          // console.log('-----6')
           for (const address in arr) {
             if (arr.hasOwnProperty(address)) {
               const data = arr[address];
@@ -383,5 +390,6 @@ export default class Transfer {
         }
       }
     }
+    Tips.loaded();
   }
 }

@@ -54,7 +54,7 @@ export class Asset {
             //判断交易高度是否已经超过两个 判断交易失败，spent状态取消
             this.utxos[utxo.txid] = utxo;
         }
-        this.amount = ((parseFloat(this.amount) + utxo.count) as number).toFixed(8);
+        // this.amount = ((parseFloat(this.amount) + utxo.count) as number).toFixed(8);
     }
 
     /**
@@ -110,8 +110,6 @@ export class Utxo {
     constructor(utxo: any) {
         this.txid = utxo.txid;
         this.n = utxo.n;
-        this.asset = utxo.asset;
-        this.addr = utxo.addr;
         this.count = parseFloat(utxo.value);
     }
 }
@@ -204,6 +202,7 @@ export class TaskManager {
 export enum TaskType {
     tx = 'tx',// 交易确认 需要签名的任务，涉及资产变动
     asset = 'asset',// 资产更新 在tx交易成功后添加资产更新任务，资产更新立即执行
+    wealth = 'wealth',
     history = 'history', //更新历史记录
     price = 'price',
     claim = 'claim',

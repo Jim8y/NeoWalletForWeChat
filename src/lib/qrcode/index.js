@@ -37,12 +37,7 @@ function drawQrcode(options = {}) {
     var label_y = 25;
     var icon_x = 20;
 
-     // 绘制logo
-    //  ctx.globalAlpha = 0.1;
-    const path = '../../images/neo.png';
-    ctx.drawImage(path, 10, 15, 40, 40);
     //  ctx.globalAlpha = 1;
-
     var label_x = icon_x+40;
     // 绘制头部信息
     ctx.setFillStyle('#27adf1')
@@ -91,6 +86,11 @@ function drawQrcode(options = {}) {
     ctx.stroke();//对当前路径进行描边  
     ctx.closePath();//关闭当前路径  
     
+     // 绘制logo
+    //  ctx.globalAlpha = 0.1;
+    const path = '../../images/neo.png';
+    ctx.drawImage(path, 10, 15, 40, 40);
+
     ctx.draw()
   }
 }

@@ -161,17 +161,9 @@
         'pages/watchonly',
         'pages/watch',
         'pages/registerwatch',
-        'pages/gas2cgas',
-        'pages/startbidding',
         'pages/assets',
         'pages/contact',
         'pages/addcontact',
-        'pages/myauction',
-        'pages/nnsloading',
-        'pages/nnsbidding',
-        'pages/nnsmydomain',
-        'pages/nnsdomain',
-        'pages/auction'
       ],
       window: {
         backgroundTextStyle: 'light',
@@ -197,12 +189,6 @@
             selectedIconPath: 'images/Transfer_s.png'
           },
           {
-            pagePath: 'pages/nns',
-            text: 'NNS',
-            iconPath: 'images/NNS.png',
-            selectedIconPath: 'images/NNS_s.png'
-          },
-          {
             pagePath: 'pages/mine',
             text: '个人',
             iconPath: 'images/Mine.png',
@@ -217,40 +203,32 @@
     constructor() {
       super();
       this.use('requestfix');
-      //   this.use('promisify');
-      console.log('-----------------------------')
-      this.testAsync()
+      // this.testAsync()
     }
-    async sleep(s) {
-      let id = await Https.addr_openid('code');
-      // return new Promise((resolve, reject) => {
-      //   setTimeout(() => {
-      //     resolve('promise resolved')
-      //   }, s * 1000)
-      // })
-      return id
-    }
-    async testAsync() {
-      const data = await this.sleep(3)
-      console.log(data)
-      return data;
-    }
+    // async sleep(s) {
+    //   let id = await Https.addr_openid('code');
+    //   return id
+    // }
+    // async testAsync() {
+    //   const data = await this.sleep(3)
+    //   console.log(data)
+    //   return data;
+    // }
     onLaunch() {
       const that = this;
       // 登陆获取用户code
       wx.login({
         success: async function(res) {
-          const code = res['code'];
-          if (code) {
-            // 获取用户openid
-            let id = await Https.addr_openid(code);
-            id = id['openid'];
-            // 保存用户id在wallet中
-            Util.set.openid = id;
-          }
+          // const code = res['code'];
+          // if (code) {
+          //   // 获取用户openid
+          //   let id = await Https.addr_openid(code);
+          //   id = id['openid'];
+          //   // 保存用户id在wallet中
+          //   Util.set.openid = id;
+          // }
         }
       });
-      Util.init.nns();
       Util.init.notity();
       // 循环执行代码
       setInterval(async() => {

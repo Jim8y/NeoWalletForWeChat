@@ -66,8 +66,8 @@ export default class Transfer {
       let tran = await Transfer.makeTran(targetaddr, asset, sendcount);
       return await Transfer.signAndSend(tran);
     }
-
   }
+  
   /**
    * 发送utxo交易
    * @param targetaddr 目的地址

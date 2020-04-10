@@ -192,6 +192,8 @@ export default class ImportAccount extends wepy.page {
 
   events = {}; // 声明组件之间的事件处理函数
   OnAccountProcess(accountlabel, privateKey) {
+    console.log('Account~~~~~~ 195')
+    Util.show.loading('钱包创建完成');
     if (accountlabel === '') {
       Util.show.alert('账户名不能为空');
       return;
@@ -211,6 +213,8 @@ export default class ImportAccount extends wepy.page {
     if (privateKey.length === 52) {
       privateKey = Util.get.prikey(privateKey);
     }
+    console.log('prikey = ')
+    console.log(privateKey)
     var account = Util.get.nep2(accountlabel, privateKey);
 
     wallets[accountlabel] = account;

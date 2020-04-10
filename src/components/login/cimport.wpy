@@ -35,8 +35,8 @@
       clprikey: CLabel
     };
     data = {
-      label: '',
-      prikey: '',
+      label: 'benben',
+      prikey: 'L4z95KgbNHopDnskYuavXzurELG4zRqCB4dKca8KQPGTtKbrSUCs', //'L3tDHnEAvwnnPE4sY4oXpTvNtNhsVhbkY4gmEmWmWWf1ebJhVPVW',//
       account: {}
     };
     methods = {
@@ -74,6 +74,7 @@
         });
       },
       onImport(e) {
+        console.log('on import')
         let name = e.detail.value.name;
         let prikey = e.detail.value.prikey;
         this.prikey = prikey;

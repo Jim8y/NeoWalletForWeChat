@@ -435,6 +435,8 @@ export class BigInteger {
     }
 
     public static multiply(x: number | BigInteger, y: number | BigInteger): BigInteger {
+        // console.log('=========')
+        // console.log(y.toString());
         let bi_x = typeof x === "number" ? new BigInteger(x) : x;
         let bi_y = typeof y === "number" ? new BigInteger(y) : y;
         if (bi_x._sign == 0) return bi_x;

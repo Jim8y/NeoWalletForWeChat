@@ -195,7 +195,9 @@
         });
       },
       async onImport(param) {
+        console.log(param)
         await Util.set.account_json(param);
+        console.log('200~~~~~~~~');
         wepy.reLaunch({
           url: './home'
         });

@@ -36,15 +36,34 @@ export default class Wallet {
      */
     static getAccount(label: string, key: string): Nep6.nep6account {
         let privateKey;
-        if (key !== null && key.length === 52 && key.charAt(0) === 'K') {
+        if (key !== null && key.length === 52) {
             privateKey = Helper.hexToBytes(Wallet.wif2prikey(key));
         } else {
             privateKey = Helper.hexToBytes(key);
+            // privateKey = Helper.hexToBytes('000000000000'+'0000000000000000050000000d00000a00000e000000b40dca080000000b000c');
+            // console.log(privateKey)
+            // console.log(Helper.toHexString(privateKey))
         }
-
+        // privateKey = Helper.hexToBytes(Wallet.wif2prikey(key));
+                    // console.log('43~~~~~')
+            // console.log(key)
+            // privateKey = Helper.hexToBytes('000000000000'+'0000050000000d00000a00000e000000b40dca080000000b000c');
+            // console.log(privateKey)
+            // console.log('~~~~~~~')
+            // console.log(Helper.toHexString(privateKey))
         Tips.loading('公钥计算中');
+       
+            // let wif = Wallet.prikey2Wif(Helper.toHexString(privateKey));
+        let wif =  Helper.Account.GetWifFromPrivateKey(privateKey);
+        // console.log(Helper.toHexString(privateKey))
+        console.log(wif)
+        // console.log(Wallet.wif2prikey(key))
+
         const publicKey = Helper.Account.GetPublicKeyFromPrivateKey(privateKey);
+
         Tips.loading('地址计算中');
+        console.log('~~~~~~~')
+        console.log(Helper.toHexString(publicKey))
         const address = Helper.Account.GetAddressFromPublicKey(publicKey);
         Tips.loaded();
         let account: Nep6.nep6account = new Nep6.nep6account();
@@ -56,19 +75,23 @@ export default class Wallet {
     }
 
     static importAccount(json) {
+        console.log('59!!!!!!!')
+        // {label: "benben", nep2key: "L3tDHnEAvwnnPE4sY4oXpTvNtNhsVhbkY4gmEmWmWWf1ebJhVPVW"}
         const label = json['label'];
         let accounts = Cache.get(LOCAL_ACCOUNTS) || {};
-
+        console.log('63!!!!!!!')
         if (accounts[label] !== undefined) {
             Tips.alert('账户名已存在');
             return;
         }
-
+        console.log('68!!!!!!!')
         let account = new Nep6.nep6account();
         const key = json['nep2key'];
         const addr = json['address'];
-
+        console.log('import account')
         if (addr === undefined) {
+            console.log('addr undefined');
+
             account = Wallet.getAccount(label, key);
         } else {
             account.address = addr;

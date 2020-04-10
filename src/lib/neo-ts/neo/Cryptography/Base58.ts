@@ -1,7 +1,7 @@
 ﻿import { BigInteger } from '../BigInteger'
 export class Base58 {
     public static Alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-
+                            //   123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz
     public static decode(input: string): Uint8Array {
         let bi = BigInteger.Zero;
         for (let i = input.length - 1; i >= 0; i--) {
